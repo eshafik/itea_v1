@@ -1,0 +1,35 @@
+{% extends "base/base.html" %}
+
+{% block titile %}
+  Draft List
+{% endblock titile %}
+
+{% block content %}
+
+<div class="wrapper mt-4">
+    <div class="container">
+
+        <div class="row">
+          <div class="col-sm-9">
+            {% if posts %}
+                {% for post in posts %}
+                <br>
+            <div class="col-md-12">
+                    <div class="card-header">
+                        <h3><a class="text-dark" href="{{post.get_absolute_url}}">{{ post.title }}</a></h3>
+                         <p>Tags: 
+                         {% for tag in post.tags.all  %}
+                             <a href="{% url 'blog:post_list_by_tag' tag.slug %}">{{tag.name}}</a>
+                             {% if not forloop.last %}, {% endif %}
+                         {% endfor %}
+                         </p>
+                    </div>
+                    <p class="card-text">{{ post.body|safe|truncatewords:30|linebreaks }}</p>
+                <p><a class="btn btn-secondary" href="{{post.get_absolute_url}}" role="button">View details &raquo;</a></p>
+            </div>
+            {%endfor%}
+            <br><br>
+            {%endif%}
+            </div>
+  
+{% endblock content %}

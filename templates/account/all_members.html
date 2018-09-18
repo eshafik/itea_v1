@@ -1,0 +1,57 @@
+{% extends "base/base.html" %}
+
+{% block title %}
+  Member List
+{% endblock title %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+        <!-- started event archive table -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa fa-align-justify"></i> All ITEA Members List
+                    </div>
+                    <div class="card-block">
+                        <table class="table table-bordered table-striped table-sm text-center">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>ITEA Status</th>
+                                <th>Profile Link</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for member in members %}
+                            <tr>
+                                <td><a href="{{member.get_absolute_url}}" class="test-success"><span class="btn text-dark">{{ member.user.first_name }} {{ member.user.last_name }}</span></a></td>
+                                {% if member.itea_status == "executive" %}
+                                <td><a href="#" class="test-success"><span class="btn text-dark">Executive Member</span></a></td>
+                                {% else %}
+                                <td><a href="#" class="test-success"><span class="btn text-dark">General Member</span></a></td>
+                                {% endif %}
+                                <td><a href="{{member.get_absolute_url}}" class="test-success">See Profile</a></td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+    
+                    </div>
+                </div>
+            </div>
+            <!--/.col-->
+        </div>
+        <!-- end event archive table -->
+    
+    </div>
+
+{% comment %} <ul>
+    {% for member in members  %}
+        <li><a href="{% url 'balance:add_balance' username=member.user %}"> {{member.user.first_name}} {{member.user}} {{member.user.id}} </a></li>
+    {% endfor %}
+</ul> {% endcomment %}
+  
+{% endblock content %}

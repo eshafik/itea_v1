@@ -1,0 +1,36 @@
+{% extends 'base/base.html' %}
+
+{% block titile %}
+  Ogranization Details Detials
+{% endblock titile %}
+
+{% block content %}
+
+<div class="jumbotron">
+        <div class="container">
+          <div class="row">
+              <div class="col-sm"></div>
+              <div class="col-sm">
+                <h3 style="color:red;"><u>Organizational Status:</u></h3><br>
+                <p><b>Total Capital:</b> {{org_details.capital}} TK.</p><br>
+                <p><b>Total Profit:</b> {{org_details.total_profit}} TK.</p><br>
+                <p><b>Total Loss:</b> {{org_details.total_loss}} TK.</p><br>
+                <p><b>Investment Details: </b>{{org_details.investment_details|safe}}</p><br>
+                <p><b>Last Updated: </b> {{org_details.updated}}</p><br><br>
+                {% if request.user.profile.itea_status == "executive" %}
+                <a href="{% url 'balance:org_edit' %}" class="btn btn-primary">Edit</a>
+                {% endif %}
+              </div>
+              <div class="col-sm"></div>
+          </div>
+        </div>
+    
+      
+    </div>
+
+{% endblock %}
+
+
+
+
+

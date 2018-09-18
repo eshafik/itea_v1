@@ -1,0 +1,62 @@
+{% extends 'base/base.html' %}
+{% load widget_tweaks %}
+{% block title %}
+Register
+{% endblock title %}
+
+{% block content %}
+  
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card mx-4">
+        <div class="card-body p-4">
+          <h1>Register</h1>
+             <form method="post" class="form-horizontal">
+                  {% csrf_token %}
+                  <div class="card-block">
+                      {% if user_form.non_field_errors %}
+                      <div class="alert alert-danger" role="alert">
+                        {% for error in user_form.non_field_errors %}
+                            {{ error }}
+                        {% endfor %}
+                      </div>
+                      {% endif %}
+
+                      {% for field in user_form.visible_fields %}
+                        <div class="form-group row">
+                            <label for="{{ field.auto_id }}" class="col-md-3 col-form-label">{{ field.label_tag }}</label>
+                            {% if user_form.is_bound %}
+                              {% if field.errors %}
+                                {% render_field field class="form-control is-invalid" %}
+                                {% for error in field.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ error }}
+                                    </div>
+                                {% endfor %}
+                              {% else %}
+                                {% render_field field class="form-control is-valid" %}
+                              {% endif %}
+                            {% else %}
+                              <div class="col-md-9">
+                                {% render_field field class="form-control" %}
+                              </div>
+                            {% endif %}
+                        </div>
+                      {% endfor %}
+                  <!--/.row-->
+                   <button type="submit" class="btn btn-primary active mt-3">Sign Up</button>
+                  <hr>
+                  <p><a href="{% url 'login' %}">Already has an account? Login</a></p>
+              </div>
+             </form>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  {% endblock content %}

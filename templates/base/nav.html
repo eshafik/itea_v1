@@ -1,0 +1,67 @@
+{% load static %}
+{% load widget_tweaks %}
+<nav class="navbar navbar-expand-sm bg-primary navbar-dark justify-content-end">
+    <a class="navbar-brand" href="{% url 'home' %}">Home</a>
+    <ul class="navbar-nav  ">
+        {% if not request.user.is_authenticated %}
+        <li class="nav-item">
+            <a class="navbar-brand" href="{%url 'blog:post_list'%}">Blog Posts</a>
+        </li>
+        {%endif%}
+        {% if request.user.is_authenticated %}
+         <!--Blog Dropdwon--> 
+         <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle navbar-brand" href="#" id="navbardrop" data-toggle="dropdown">
+            Blog
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item " href="{%url 'blog:post_list'%}">Blog Posts</a>
+            <a class="dropdown-item" href="{%url 'blog:create_post'%}">Create Post</a>
+            <a class="dropdown-item" href="{% url 'blog:draft_list'%}">Draft</a>
+          </div>
+        </li>
+        <li class="nav-item">
+            <a class="navbar-brand" href="{% url 'all_members'%}">Members</a>
+        </li>
+
+        <!-- My Profile Dropdown -->
+        <li class="nav-item dropdown ">
+          <a class="nav-link dropdown-toggle navbar-brand" href="#" id="navbardrop" data-toggle="dropdown">
+            My Profile
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item " href="{%url 'profile_details' username=request.user %}">My Profile</a>
+            <a class="dropdown-item" href="{%url 'edit' %}">Edit Profile Info</a>
+            <a class="dropdown-item" href="{%url 'balance:org_detail' %}">See Organization Details</a>
+
+            {% if request.user.profile.itea_status == "executive" %}
+            <a class="dropdown-item" href="{%url 'blog:create_post'%}">Edit Organization Status</a> 
+            {% endif %}
+            {% if request.user.profile.finance %}
+            <a class="dropdown-item" href="{% url 'balance:active_members'%}">Add Balance</a>
+            {% endif %}
+
+          </div>
+        </li>
+        <!--LogOut Dropdown-->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+            {{request.user.username}}
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item " href="{% url 'logout'%}">Log Out</a>
+          </div>
+        </li>
+        {% else %}
+            <a class="navbar-brand" href="{%url 'login'%}">Log-In</a>
+            {% endif %}
+        <li class="nav-item justify-content-right">
+            <form  action="/blog/search/" method="GET" class="form-inline">
+                <input  id="search_box" type="text" name="search_box"  placeholder="Search..." >
+              <button class="btn btn-success" type="submit">Search</button>
+            </form> 
+          </li>
+  
+      </ul>
+</nav>
+

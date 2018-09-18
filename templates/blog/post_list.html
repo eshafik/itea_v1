@@ -1,0 +1,138 @@
+{% extends 'base/base.html' %}
+{% load blog_tags %}
+{% block title %}
+Blog Posts
+{% endblock title %}
+
+{% block content %}
+
+<div class="wrapper mt-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="jumbotron">
+                        <h1>Welcome To I-TEA Blog</h1>
+                        <p>Total {%total_posts%} posts are written by the I-TEA members.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-9">
+                {% if posts %}
+                    {% for post in posts %}
+                    <br>
+
+                    <!--Executive Feed-->
+                {% if request.user.profile.itea_status == "executive" or request.user == post.author %}
+                <div class="col-md-12">
+                    <div class="card-header">
+                        <h3><a class="text-dark" href="{{post.get_absolute_url}}">{{ post.title }}</a></h3>
+                         <p>Tags: 
+                         {% for tag in post.tags.all  %}
+                             <a href="{% url 'blog:post_list_by_tag' tag.slug %}">{{tag.name}}</a>
+                             {% if not forloop.last %}, {% endif %}
+                         {% endfor %}
+                         [privacy: {{post.show_to}}]
+                         </p>
+                    </div>
+                    <p class="card-text">{{ post.body|safe|truncatewords:30|linebreaks }}</p>
+                <p><a class="btn btn-secondary" href="{{post.get_absolute_url}}" role="button">View details &raquo;</a></p>
+                </div>
+                <!--Members Feed-->
+                {% elif request.user.profile.itea_status == "member" %}
+                    {% if post.show_to == "member" or post.show_to == "public" %}
+                    <div class="col-md-12">
+                        <div class="card-header">
+                            <h3><a class="text-dark" href="{{post.get_absolute_url}}">{{ post.title }}</a></h3>
+                             <p>Tags: 
+                             {% for tag in post.tags.all  %}
+                                 <a href="{% url 'blog:post_list_by_tag' tag.slug %}">{{tag.name}}</a>
+                                 {% if not forloop.last %}, {% endif %}
+                             {% endfor %}
+                             [privacy: {{post.show_to}}]
+                             </p>
+                        </div>
+                        <p class="card-text">{{ post.body|safe|truncatewords:30|linebreaks }}</p>
+                    <p><a class="btn btn-secondary" href="{{post.get_absolute_url}}" role="button">View details &raquo;</a></p>
+                    </div>
+                      
+                    {% endif %}
+                <!--Public Feed-->
+                {% else %}
+                    {% if post.show_to == "public" %}
+                    <div class="col-md-12">
+                        <div class="card-header">
+                            <h3><a class="text-dark" href="{{post.get_absolute_url}}">{{ post.title }}</a></h3>
+                             <p>Tags: 
+                             {% for tag in post.tags.all  %}
+                                 <a href="{% url 'blog:post_list_by_tag' tag.slug %}">{{tag.name}}</a>
+                                 {% if not forloop.last %}, {% endif %}
+                             {% endfor %}
+                             [privacy: {{post.show_to}}]
+                             </p>
+                        </div>
+                        <p class="card-text">{{ post.body|safe|truncatewords:30|linebreaks }}</p>
+                    <p><a class="btn btn-secondary" href="{{post.get_absolute_url}}" role="button">View details &raquo;</a></p>
+                    </div>
+                      
+                    {% endif %}
+                  
+                {% endif %}
+
+                <!-- <div class="col-md-12">
+                        <div class="card-header">
+                            <h3><a class="text-dark" href="{{post.get_absolute_url}}">{{ post.title }}</a></h3>
+                             <p>Tags: 
+                             {% for tag in post.tags.all  %}
+                                 <a href="{% url 'blog:post_list_by_tag' tag.slug %}">{{tag.name}}</a>
+                                 {% if not forloop.last %}, {% endif %}
+                             {% endfor %}
+                             </p>
+                        </div>
+                        <p class="card-text">{{ post.body|safe|truncatewords:30|linebreaks }}</p>
+                    <p><a class="btn btn-secondary" href="{{post.get_absolute_url}}" role="button">View details &raquo;</a></p>
+                </div> -->
+                {%endfor%}
+                <br><br><br>
+                {% include "blog/pagination.html" with page=posts %}
+                <br><br>
+                {%endif%}
+                </div>
+                
+                <!--For sidebar -->
+                <div class="col-sm-3">
+                <div class="col-md-12">
+
+                    <h3>Recent Post</h3>
+                    {% if request.user.profile.itea_status == "executive" %}
+                    {%show_latest_posts 3%}
+                    {% elif request.user.profile.itea_status == "member" %} 
+                    {%show_latest_posts_for_member 3 %}
+                    {% else %}
+                    {%show_latest_posts_for_public 3 %}
+                    {% endif %}
+                    <br><br><br>
+
+                    {% comment %} <h3>Most Commented Post</h3>
+                    {% get_most_commented_posts as most_commented_posts %}
+                    <ul>
+                        {% for post in most_commented_posts  %}
+                        <li>
+                            <a href={{post.get_absolute_url}}>{{post.title}}</a>
+                        </li>
+          
+                         {% endfor %}
+                    </ul> {% endcomment %}
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+    
+    <!--End -->
+
+
+   
+
+{% endblock %}
